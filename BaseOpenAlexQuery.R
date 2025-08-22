@@ -1,7 +1,8 @@
 #This code is based on the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: https://github.com/schauch/OpenAlexRFSCI2025
 
+OutputPath = "OutputFiles/Institutional_2023DataRawFlattenedTest.csv" #File path for results
 
-file.edit("~/.Rprofile") #Add email address to use polite pool / Only needs to be done once
+options(openalexR.mailto = "jason.friedman@usask.ca") #Add email address to use polite pool / Only needs to be done once
 
 #Query String
 
@@ -10,14 +11,14 @@ Institutional_Works <- oa_fetch(
   authorships.institutions.lineage = "i32625721", #OpenAlex Institution ID is USask
   type = "article", #type of item
   primary_location.source.type = "journal", #limit to journal articles
-  from_publication_date = "2024-06-01", #start range
-  to_publication_date = "2024-07-31", #end range
-  mailto = oa_email(), #To use polite API
+  from_publication_date = "2023-01-01", #start range
+  to_publication_date = "2023-12-31", #end range
+#  mailto = oa_email(), #To use polite API
 #  per_page = 25,
   verbose = TRUE
 )
 
-#Filter string Add/remove column headers as desired.
+#Filter string Add/remove column headers as desired. Columns listed below are removed from the results.
 FilterColumns = c(
   'abstract', 
   'fwci', 
@@ -46,5 +47,5 @@ Institutional_APCs <- unnest(Institutional_AuthorsAffilations, apc, names_sep = 
 
 # Institutional_APCs <- Institutional_APCs %>% select(-any_of('authorships_affiliation_raw'))
 
-write.csv(Institutional_APCs, "OutputFiles/Institutional_DataRawFlattened.csv")
+write.csv(Institutional_APCs, OutputPath)
                                                     
