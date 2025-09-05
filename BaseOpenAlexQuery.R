@@ -1,4 +1,4 @@
-#This code is based on the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: https://github.com/schauch/OpenAlexRFSCI2025
+#This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: https://github.com/schauch/OpenAlexRFSCI2025
 
 #Install and include necessary packages. Install only needs to be run once.
 #install.packages("openalexR") 
@@ -7,7 +7,14 @@
 library(openalexR)
 library(tidyverse)
 
-OutputPath = "OutputFiles/USask2023/" #File path for results
+#Use Current date and time to name directory
+CurrentWD = getwd() #Get current working directory
+CurrentTime <- substr(Sys.time(),1,19) #Get current time to the second
+CurrentTime <- str_replace(CurrentTime,' ','_') #Replace space with underscore
+CurrentTime <- str_replace_all(CurrentTime,':','_') #Replace : with underscore
+OutputPath <- paste("Output", CurrentTime,sep = '_') #File path for results
+dir.create(OutputPath) #Create output directory
+setwd(OutputPath) #Set new working directory for output
 
 options(openalexR.mailto = "jason.friedman@usask.ca") #Add email address to use polite pool / Only needs to be done once
 
@@ -52,23 +59,23 @@ FilterColumns = c(
 #Generate initial works list
 Institutional_FilteredWorks <- Institutional_Works %>% select(-any_of(FilterColumns)) #Removes columns indicated above
 Institutional_FilteredWorksOnly <- Institutional_FilteredWorks %>% select(-any_of(c("authorships","apc"))) #Removes nested data authorships/apc for a clean works list for export
-write.csv(Institutional_FilteredWorksOnly,paste0(OutputPath,"WorksList.csv")) #Exports works list
+write.csv(Institutional_FilteredWorksOnly,"WorksList.csv") #Exports works list
 
 #Generate initial authors list
 Institutional_Authors <- unnest(Institutional_FilteredWorks, authorships, names_sep = "_") #Unnests authorships so that all authors are listed
 Institutional_AuthorsOnly <- Institutional_Authors %>% select(-any_of(c("authorships_affiliations","apc"))) #Removes nested data affiliations and apc for a clearn authors list for export
-write.csv(Institutional_AuthorsOnly,paste0(OutputPath,"AuthorsList.csv")) #Exports authors list
+write.csv(Institutional_AuthorsOnly,"AuthorsList.csv") #Exports authors list
 
 #Generate corresponding authors list
 Corresponding_only <- filter(Institutional_Authors, authorships_is_corresponding == "TRUE") #Filters list to only include corresponding authors
 Corresponding_AuthorsAffilations <- unnest(Corresponding_only, authorships_affiliations, names_sep = "_") #Unnests affiliations so that all affiliations are listed
 Corresponding_AuthorsAffilations_NoAPC <- Corresponding_AuthorsAffilations %>% select(!"apc") #Removes APC data for clean export
-write.csv(Corresponding_AuthorsAffilations_NoAPC,paste0(OutputPath,"CorrespondingAuthorsList.csv")) #Exports corresponding authors list
+write.csv(Corresponding_AuthorsAffilations_NoAPC,"CorrespondingAuthorsList.csv") #Exports corresponding authors list
 
 #Generate institutional corresponding authors list
 Institutional_CorrespondingAuthors <- filter(Corresponding_AuthorsAffilations, authorships_affiliations_id == paste0("https://openalex.org/", Institution_OpenAlex_ID)) #Filters corresponding authors list 
 Institutional_CorrespondingAuthors_NoAPC <- Institutional_CorrespondingAuthors %>% select(!"apc") #Removes APC data for clean export
-write.csv(Institutional_CorrespondingAuthors_NoAPC,paste0(OutputPath,"InstitutionalCorrespondingAuthors.csv")) #Exports institutional corresponding authors list
+write.csv(Institutional_CorrespondingAuthors_NoAPC,"InstitutionalCorrespondingAuthors.csv") #Exports institutional corresponding authors list
 
 #Generate Paid/List APC list
 #Institutional_OA <- filter(Institutional_AuthorsOnly, is_oa == "TRUE")
@@ -77,7 +84,8 @@ Institutional_APCs <- unnest(Institutional_CorrespondingAuthors, apc, names_sep 
 
 # Institutional_APCs <- Institutional_APCs %>% select(-any_of('authorships_affiliation_raw'))
 
-write.csv(Institutional_APCs, paste0(OutputPath,"InstitutionalAPCList.csv")) #Writes institutional corresponding author APC data
+write.csv(Institutional_APCs,"InstitutionalAPCList.csv") #Writes institutional corresponding author APC data
 #write.csv(Corresponding_only, CorrespondingOutputPath)
 
-                                                    
+setwd(CurrentWD) #Return to old working directory
+                                                  
