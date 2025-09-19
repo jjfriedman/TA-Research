@@ -1,41 +1,26 @@
 #This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: https://github.com/schauch/OpenAlexRFSCI2025
 
 #Install and include necessary packages. Install only needs to be run once.
-#install.packages("openalexR") 
-#install.packages("tidyverse")
-#install.packages("openxlsx2")
+install.packages("openalexR") #Package to query OpenAlex
+install.packages("tidyverse") #Package to work with data more easily
+install.packages("openxlsx2") #Package to export to Excel
 
+#Load the necessary packages
 library(openalexR)
 library(tidyverse)
 library(openxlsx2)
 
-#Use Current date and time to name directory
-CurrentWD = getwd() #Get current working directory
-CurrentTime <- substr(Sys.time(),1,19) #Get current time to the second
-CurrentTime <- str_replace(CurrentTime,' ','_') #Replace space with underscore
-CurrentTime <- str_replace_all(CurrentTime,':','_') #Replace : with underscore
-OutputPath <- paste("Output", CurrentTime,sep = '_') #File path for results
-dir.create(OutputPath) #Create output directory
-setwd(OutputPath) #Set new working directory for output
-
 options(openalexR.mailto = "jason.friedman@usask.ca") #Add email address to use polite pool / Only needs to be done once
 
-Institution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is USask
+#Query String: Modify the variables below to adjust query
+QueryEntity = "works" #Entity
+QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is USask
+QueryType = "article" #Type
+QuerySourceType = "journal" #Source Type
+QueryStartDate = "2019-01-01" #Publication Start Date
+QueryEndDate = "2024-12-31" #Publication End Date
+
 InstitutionFilterString = paste0("https://openalex.org/", Institution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
-
-#Query String
-
-Institutional_Works <- oa_fetch(
-  entity = "works", #query type
-  authorships.institutions.lineage = Institution_OpenAlex_ID, 
-  type = "article", #type of item
-  primary_location.source.type = "journal", #limit to journal articles
-  from_publication_date = "2023-01-01", #start range
-  to_publication_date = "2023-12-31", #end range
-#  mailto = oa_email(), #To use polite API
-#  per_page = 25,
-  verbose = TRUE
-)
 
 #Filter string Add/remove column headers as desired. Columns listed below are removed from the results.
 FilterColumns = c(
@@ -56,52 +41,111 @@ FilterColumns = c(
   'topics',
   'keywords',
   'grants'
-  )
+)
+
+#Use Current date and time to name directory
+CurrentWD = getwd() #Get current working directory
+CurrentTime <- substr(Sys.time(),1,19) #Get current time to the second
+CurrentTime <- str_replace(CurrentTime,' ','_') #Replace space with underscore
+CurrentTime <- str_replace_all(CurrentTime,':','_') #Replace : with underscore
+OutputPath <- paste("Output", CurrentTime,sep = '_') #File path for results
+dir.create(OutputPath) #Create output directory
+setwd(OutputPath) #Set new working directory for output
+
+#This code uses the query variables above to call the OpenAlex API
+Institutional_Works <- oa_fetch(
+  entity = QueryEntity, #query type
+  authorships.institutions.lineage = QueryInstitution_OpenAlex_ID, 
+  type = QueryType, #type of item
+  primary_location.source.type = QuerySourceType, #limit to journal articles
+  from_publication_date = QueryStartDate, #start range
+  to_publication_date = QueryEndDate, #end range
+#  mailto = oa_email(), #To use polite API if not set above
+  verbose = TRUE
+)
+
+#Records query information, time stamp, and warning in data frame for future Export
+QueryWarnings = names(last.warning) #Save warning message
+QueryStructure <- c("Entity", "Institution ID", "Type", "Source Type", "Start Date", "End Date", "Timestamp", "Warnings") #Query labels
+QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentTime, QueryWarnings) #Query values
+Query <- data.frame(Request = QueryStructure, Value = QueryValues) #Create data frame for Query information
 
 #Generate initial works list
 Institutional_FilteredWorks <- Institutional_Works %>% select(-any_of(FilterColumns)) #Removes columns indicated above
 Institutional_FilteredWorksOnly <- Institutional_FilteredWorks %>% select(-any_of(c("authorships","apc"))) #Removes nested data authorships/apc for a clean works list for export
 Institutional_OAWorksOnly <- filter(Institutional_FilteredWorksOnly,is_oa == TRUE) #Generate OA works list
 Institutional_GoldHybrid <- filter(Institutional_FilteredWorksOnly,oa_status == "gold" | oa_status == "hybrid") #Generate Gold/Hybrid only works list (possible APC paid)
-#write.csv(Institutional_FilteredWorksOnly,"WorksList.csv") #Exports works list
 
 #Generate initial authors list
-Institutional_Authors <- unnest(Institutional_FilteredWorks, authorships, names_sep = "_") #Unnests authorships so that all authors are listed
-Institutional_AuthorsOnly <- Institutional_Authors %>% select(-any_of(c("authorships_affiliations","apc"))) #Removes nested data affiliations and apc for a clean authors list for export
-#write.csv(Institutional_AuthorsOnly,"AuthorsList.csv") #Exports authors list
+Institutional_AllAuthors <- unnest(Institutional_FilteredWorks, authorships, names_sep = "_") #Unnests authorships so that all authors are listed
+Institutional_AllAuthorsOnly <- Institutional_AllAuthors %>% select(-any_of(c("authorships_affiliations","apc"))) #Removes nested data affiliations and apc for a clean authors list for export
+
+#Generate affiliations list
+AllAuthorAffiliations <- unnest(Institutional_AllAuthors, authorships_affiliations, names_sep = "_") #Unnests affiliations so that all affiliations are listed
+AllAuthorAffiliations_NoAPC <- AllAuthorAffiliations %>% select(!"apc") #Removes APC data for clean export
+Institutional_AuthorsOnly <- filter(AllAuthorAffiliations_NoAPC, authorships_affiliations_id == paste0("https://openalex.org/", Institution_OpenAlex_ID)) #Filters affiliations to institution only
+Institutional_GoldHybridAuthorsOnly <- filter(Institutional_AuthorsOnly, oa_status == "gold" | oa_status == "hybrid")
 
 #Generate corresponding authors list
-Corresponding_only <- filter(Institutional_Authors, authorships_is_corresponding == "TRUE") #Filters list to only include corresponding authors
+Corresponding_only <- filter(Institutional_AllAuthors, authorships_is_corresponding == "TRUE") #Filters list to only include corresponding authors
 Corresponding_AuthorsAffilations <- unnest(Corresponding_only, authorships_affiliations, names_sep = "_") #Unnests affiliations so that all affiliations are listed
 Corresponding_AuthorsAffilations_NoAPC <- Corresponding_AuthorsAffilations %>% select(!"apc") #Removes APC data for clean export
-#write.csv(Corresponding_AuthorsAffilations_NoAPC,"CorrespondingAuthorsList.csv") #Exports corresponding authors list
 
 #Generate institutional corresponding authors list
 Institutional_CorrespondingAuthors <- filter(Corresponding_AuthorsAffilations, authorships_affiliations_id == paste0("https://openalex.org/", Institution_OpenAlex_ID)) #Filters corresponding authors list for institutional list
-#NotInstitutional_CorrespondingAuthors <- filter(Corresponding_AuthorsAffilations, authorships_affiliations_id != paste0("https://openalex.org/", Institution_OpenAlex_ID)) #Filters corresponding authors list for non-institutional list
 Institutional_CorrespondingAuthors_NoAPC <- Institutional_CorrespondingAuthors %>% select(!"apc") #Removes APC data for clean export
-#NotInstitutional_CorrespondingAuthors_NoAPC <- NotInstitutional_CorrespondingAuthors %>% select(!"apc") #Removes APC data for clean export
-#write.csv(Institutional_CorrespondingAuthors_NoAPC,"InstitutionalCorrespondingAuthors.csv") #Exports institutional corresponding authors list
-#write.csv(NotInstitutional_CorrespondingAuthors_NoAPC,"CorrespondingAuthorsFromOtherInstitutions.csv")
+Institutional_GoldHybrid_CorrespondingAuthors_NoAPC <- filter(Institutional_CorrespondingAuthors_NoAPC, oa_status == "gold" | oa_status == "hybrid") #Filters institutional corresponding authors list for gold and hybrid only
 
 #Generate Paid/List APC list
-#Institutional_OA <- filter(Institutional_AuthorsOnly, is_oa == "TRUE")
-Institutional_APCs <- unnest(Institutional_CorrespondingAuthors, apc, names_sep = "_") #Unnests APC data for export
-#Corresponding_only <- filter(Institutional_APCs, authorships_is_corresponding == "TRUE")
+Institutional_APCs <- unnest(Institutional_FilteredWorks, apc, names_sep = "_") #Unnests APC data for export
+Institutional_APCS_NoAffiliation <- Institutional_APCs %>% select(!"authorships") #Removes author data for clean export
+Institutional_GoldHybrid_APCs <- filter(Institutional_APCS_NoAffiliation, oa_status == "gold" | oa_status == "hybrid") #Selects only gold and hybrid articles
 
-# Institutional_APCs <- Institutional_APCs %>% select(-any_of('authorships_affiliation_raw'))
-
-#write.csv(Institutional_APCs,"InstitutionalAPCList.csv") #Writes institutional corresponding author APC data
-#write.csv(Corresponding_only, CorrespondingOutputPath)
+#Build data frame for guide Worksheet
+WorksheetNames <- c("Query",
+                    "Works", 
+                    "OAWorks",
+                    "GoldHybrid",
+                    "AllAuthors",
+                    "AllAffiliations",
+                    "InstAuthors", 
+                    "InstAuthorsGoldHybrid",
+                    "Corresponding", 
+                    "InstCorresponding", 
+                    "InstCorrespondingGoldHybrid",
+                    "APCs",
+                    "GoldHybridAPCs")
+WorksheetDescriptions <- c("Query Information (includes warnings for articles with more than 100 authors)",
+                           "All institutional Works",
+                           "All open access Works",
+                           "All gold and hybrid Instituional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status",
+                           "All authors for all institutional works",
+                           "All affiliations for all authors for all institutional works",
+                           "All affiliated authors for the institution for all works",
+                           "All affiliated authors for the institutional for Gold and Hybrid works",
+                           "All corresponding authors for all works Note: This data is a work in progress https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding",
+                           "All corresponding authors affiliated with the institution for all works",
+                           "All corresponding authors affiliated with the institution for all Gold and Hybrid works",
+                           "All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid",
+                           "All list and 'paid' APC data for all gold and hybrid works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid")
+GuideSheet <- data.frame(Worksheet = WorksheetNames, Description = WorksheetDescriptions)
 
 #Generate Excel file with worksheets for each data frame
-ListofWorksheets <- list("Works" = Institutional_FilteredWorksOnly, 
+ListofWorksheets <- list("Guide" = GuideSheet,
+  "Query" = Query,
+  "Works" = Institutional_FilteredWorksOnly, 
   "OAWorks" = Institutional_OAWorksOnly,
   "GoldHybrid" = Institutional_GoldHybrid,
-  "Authors" = Institutional_AuthorsOnly, 
+  "AllAuthors" = Institutional_AllAuthorsOnly,
+  "AllAffiliations" = AllAuthorAffiliations_NoAPC,
+  "InstAuthors" = Institutional_AuthorsOnly, 
+  "InstAuthorsGoldHybrid" = Institutional_GoldHybridAuthorsOnly,
   "Corresponding" = Corresponding_AuthorsAffilations_NoAPC, 
   "InstCorresponding" = Institutional_CorrespondingAuthors_NoAPC, 
-  "APCs" = Institutional_APCs)
+  "InstGoldHybridCorresponding" = Institutional_GoldHybrid_CorrespondingAuthors_NoAPC,
+  "APCs" = Institutional_APCS_NoAffiliation,
+  "GoldHybridAPCs" = Institutional_GoldHybrid_APCs
+  )
 write_xlsx(ListofWorksheets,"DataSet.xlsx")
 
 setwd(CurrentWD) #Return to old working directory
