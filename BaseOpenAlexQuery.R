@@ -14,13 +14,13 @@ options(openalexR.mailto = "jason.friedman@usask.ca") #Add email address to use 
 
 #Query String: Modify the variables below to adjust query
 QueryEntity = "works" #Entity
-QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is USask
+QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.
 QueryType = "article" #Type
 QuerySourceType = "journal" #Source Type
 QueryStartDate = "2019-01-01" #Publication Start Date
 QueryEndDate = "2024-12-31" #Publication End Date
 
-InstitutionFilterString = paste0("https://openalex.org/", Institution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
+InstitutionFilterString = paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
 
 #Filter string Add/remove column headers as desired. Columns listed below are removed from the results.
 FilterColumns = c(
@@ -83,7 +83,7 @@ Institutional_AllAuthorsOnly <- Institutional_AllAuthors %>% select(-any_of(c("a
 #Generate affiliations list
 AllAuthorAffiliations <- unnest(Institutional_AllAuthors, authorships_affiliations, names_sep = "_") #Unnests affiliations so that all affiliations are listed
 AllAuthorAffiliations_NoAPC <- AllAuthorAffiliations %>% select(!"apc") #Removes APC data for clean export
-Institutional_AuthorsOnly <- filter(AllAuthorAffiliations_NoAPC, authorships_affiliations_id == paste0("https://openalex.org/", Institution_OpenAlex_ID)) #Filters affiliations to institution only
+Institutional_AuthorsOnly <- filter(AllAuthorAffiliations_NoAPC, authorships_affiliations_id == paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID)) #Filters affiliations to institution only
 Institutional_GoldHybridAuthorsOnly <- filter(Institutional_AuthorsOnly, oa_status == "gold" | oa_status == "hybrid")
 
 #Generate corresponding authors list
@@ -92,7 +92,7 @@ Corresponding_AuthorsAffilations <- unnest(Corresponding_only, authorships_affil
 Corresponding_AuthorsAffilations_NoAPC <- Corresponding_AuthorsAffilations %>% select(!"apc") #Removes APC data for clean export
 
 #Generate institutional corresponding authors list
-Institutional_CorrespondingAuthors <- filter(Corresponding_AuthorsAffilations, authorships_affiliations_id == paste0("https://openalex.org/", Institution_OpenAlex_ID)) #Filters corresponding authors list for institutional list
+Institutional_CorrespondingAuthors <- filter(Corresponding_AuthorsAffilations, authorships_affiliations_id == paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID)) #Filters corresponding authors list for institutional list
 Institutional_CorrespondingAuthors_NoAPC <- Institutional_CorrespondingAuthors %>% select(!"apc") #Removes APC data for clean export
 Institutional_GoldHybrid_CorrespondingAuthors_NoAPC <- filter(Institutional_CorrespondingAuthors_NoAPC, oa_status == "gold" | oa_status == "hybrid") #Filters institutional corresponding authors list for gold and hybrid only
 
