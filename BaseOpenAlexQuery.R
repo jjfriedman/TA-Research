@@ -17,7 +17,7 @@ QueryEntity = "works" #Entity
 QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.
 QueryType = "article" #Type
 QuerySourceType = "journal" #Source Type
-QueryStartDate = "2019-01-01" #Publication Start Date
+QueryStartDate = "2024-10-01" #Publication Start Date
 QueryEndDate = "2024-12-31" #Publication End Date
 
 InstitutionFilterString = paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
@@ -66,6 +66,7 @@ Institutional_Works <- oa_fetch(
 
 #Records query information, time stamp, and warning in data frame for future Export
 QueryWarnings = names(last.warning) #Save warning message
+QueryWarnings <- QueryWarnings[!QueryWarnings %in% c("Note: `oa_fetch` and `oa2df` now return new names for some columns in openalexR v2.0.0.\n      See NEWS.md for the list of changes.\n      Call `get_coverage()` to view the all updated columns and their original names in OpenAlex.\n\033[90mThis warning is displayed once every 8 hours.\033[39m")] #This code filters out a specific openalexr warning about column name changes.
 QueryStructure <- c("Entity", "Institution ID", "Type", "Source Type", "Start Date", "End Date", "Timestamp", "Warnings") #Query labels
 QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentTime, QueryWarnings) #Query values
 Query <- data.frame(Request = QueryStructure, Value = QueryValues) #Create data frame for Query information
