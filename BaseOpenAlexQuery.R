@@ -17,7 +17,7 @@ QueryEntity = "works" #Entity
 QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.
 QueryType = "article" #Type
 QuerySourceType = "journal" #Source Type
-QueryStartDate = "2024-10-01" #Publication Start Date
+QueryStartDate = "2019-01-01" #Publication Start Date
 QueryEndDate = "2024-12-31" #Publication End Date
 
 InstitutionFilterString = paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
@@ -61,7 +61,8 @@ Institutional_Works <- oa_fetch(
   from_publication_date = QueryStartDate, #start range
   to_publication_date = QueryEndDate, #end range
 #  mailto = oa_email(), #To use polite API if not set above
-  verbose = TRUE
+  verbose = TRUE,
+  options = list("data-version" = 2), #Toggle to use version 2/Walden of OpenAlex
 )
 
 #Records query information, time stamp, and warning in data frame for future Export
