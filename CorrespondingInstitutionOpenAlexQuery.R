@@ -15,10 +15,10 @@ options(openalexR.mailto = "jason.friedman@usask.ca") #Add email address to use 
 #Query String: Modify the variables below to adjust query
 QueryEntity = "works" #Entity
 QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.
-QueryType = "article" #Type
-QuerySourceType = "journal" #Source Type
-QueryStartDate = "2024-01-01" #Publication Start Date
-QueryEndDate = "2024-12-31" #Publication End Date
+QueryType = "article|review" #Type
+QuerySourceType = "journal|conference" #Source Type
+QueryStartDate = "2023-01-01" #Publication Start Date
+QueryEndDate = "2023-12-31" #Publication End Date
 
 InstitutionFilterString = paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
 
@@ -55,14 +55,14 @@ setwd(OutputPath) #Set new working directory for output
 #This code uses the query variables above to call the OpenAlex API
 Institutional_Works <- oa_fetch(
   entity = QueryEntity, #query type
-  authorships.institutions.lineage = QueryInstitution_OpenAlex_ID, 
+  corresponding_institution_ids = QueryInstitution_OpenAlex_ID, 
   type = QueryType, #type of item
   primary_location.source.type = QuerySourceType, #limit to journal articles
   from_publication_date = QueryStartDate, #start range
   to_publication_date = QueryEndDate, #end range
 #  mailto = oa_email(), #To use polite API if not set above
   verbose = TRUE,
-#  options = list("data-version" = 1), #Toggle to use version 1/old version of OpenAlex
+#  options = list("data-version" = 1), #Toggle to use version 2/Walden of OpenAlex
 )
 
 #Records query information, time stamp, and warning in data frame for future Export
@@ -121,7 +121,7 @@ WorksheetNames <- c("Query",
 WorksheetDescriptions <- c("Query Information (includes warnings for articles with more than 100 authors)",
                            "All institutional Works",
                            "All open access Works",
-                           "All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status",
+                           "All gold and hybrid Instituional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status",
                            "All authors for all institutional works",
                            "All affiliations for all authors for all institutional works",
                            "All affiliated authors for the institution for all works",

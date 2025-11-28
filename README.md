@@ -25,14 +25,49 @@ This code does not support API key access.
 
 The main query code is on lines 16-21:
 
-#Query String: Modify the variables below to adjust query
-QueryEntity = "works" #Entity
-QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.
-QueryType = "article" #Type
-QuerySourceType = "journal" #Source Type
-QueryStartDate = "2024-01-01" #Publication Start Date
-QueryEndDate = "2024-12-31" #Publication End Date
+#Query String: Modify the variables below to adjust query  
+QueryEntity = "works" #Entity  
+QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.  
+QueryType = "article" #Type  
+QuerySourceType = "journal" #Source Type  
+QueryStartDate = "2024-01-01" #Publication Start Date  
+QueryEndDate = "2024-12-31" #Publication End Date  
 
 This code will only work with the [works entity](https://docs.openalex.org/api-entities/works).
 
-In order to design your query, the easiest way is to use the OpenAlex web interface, copy the API link, and paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=authorships.institutions.lineage:i32625721,type:types/article,primary_location.source.type:source-types/journal,publication_year:2024) above, click on the
+In order to design your query, the easiest way is to use the OpenAlex web interface, copy the API link, and paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=authorships.institutions.lineage:i32625721,type:types/article,primary_location.source.type:source-types/journal,publication_year:2024) above,
+click on the three dots and select "Show API query". You can then replace the sample ID above with your institution's ID. **Please note, you must capitalize the i in the institutional identifier for the code to work.
+
+You can also modify the type and source type (or remove them) if you don't want to use the defaults.
+
+![Screenshot](OpenAlexScreenshot.png)
+
+Once that's done you're ready to run the code.
+
+The final Excel file is labeled "Dataset.xlsx" and will be located in a directory based on the timestamp.
+
+If everything works, there will be a message at the end indicating "The code successfully completed."
+
+The Excel file consists of 14 worksheets:
+
+1.  Guide: A listing of all of the worksheets  
+2.  Query:	Query Information (includes warnings for articles with more than 100 authors)  
+3.  Works:	All institutional Works
+4.  OAWorks:	All open access Works
+5.  GoldHybrid	All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status  
+6.  AllAuthors	All authors for all institutional works  
+7.  AllAffiliations	All affiliations for all authors for all institutional works  
+8.  InstAuthors	All affiliated authors for the institution for all works  
+9.  InstAuthorsGoldHybrid	All affiliated authors for the institutional for Gold and Hybrid works  
+10. Corresponding	All corresponding authors for all works Note: This data is a work in progress https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding  
+11. InstCorresponding	All corresponding authors affiliated with the institution for all works  
+12. InstCorrespondingGoldHybrid	All corresponding authors affiliated with the institution for all Gold and Hybrid works  
+13. APCs	All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
+14. GoldHybridAPCs	All list and 'paid' APC data for all gold and hybrid works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
+
+<h2>For more advanced users:</h2>
+
+There is a filter string to remove columns in lines 27-43. Those columns can be commented out or removed to add additional columns to the Excel file.
+Where there is only one variable for the column, they should be integrated into the Excel file without issue.
+Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
+
