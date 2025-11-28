@@ -54,16 +54,16 @@ The Excel file consists of 14 worksheets:
 2.  Query:	Query Information (includes warnings for articles with more than 100 authors)  
 3.  Works:	All institutional Works
 4.  OAWorks:	All open access Works
-5.  GoldHybrid	All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status  
-6.  AllAuthors	All authors for all institutional works  
-7.  AllAffiliations	All affiliations for all authors for all institutional works  
-8.  InstAuthors	All affiliated authors for the institution for all works  
-9.  InstAuthorsGoldHybrid	All affiliated authors for the institutional for Gold and Hybrid works  
-10. Corresponding	All corresponding authors for all works Note: This data is a work in progress https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding  
-11. InstCorresponding	All corresponding authors affiliated with the institution for all works  
-12. InstCorrespondingGoldHybrid	All corresponding authors affiliated with the institution for all Gold and Hybrid works  
-13. APCs	All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
-14. GoldHybridAPCs	All list and 'paid' APC data for all gold and hybrid works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
+5.  GoldHybrid:	All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status  
+6.  AllAuthors:	All authors for all institutional works  
+7.  AllAffiliations:	All affiliations for all authors for all institutional works  
+8.  InstAuthors:	All affiliated authors for the institution for all works  
+9.  InstAuthorsGoldHybrid:	All affiliated authors for the institutional for Gold and Hybrid works  
+10. Corresponding:	All corresponding authors for all works Note: This data is a work in progress https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding  
+11. InstCorresponding:	All corresponding authors affiliated with the institution for all works  
+12. InstCorrespondingGoldHybrid:	All corresponding authors affiliated with the institution for all Gold and Hybrid works  
+13. APCs:	All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
+14. GoldHybridAPCs:	All list and 'paid' APC data for all gold and hybrid works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
 
 <h2>For more advanced users:</h2>
 
