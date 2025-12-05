@@ -23,7 +23,7 @@ You'll need software to edit and run code. I recommend (and use) the free and op
 
 The main file is BaseOpenAlexQuery.R. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because OpenAlex [corresponding author data](https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding) is not reliable.
 
-The code should do this for you (lines 4-6), but you'll also need install 3 packages:
+The code should do this for you (lines 4-6), but you'll also need to install 3 packages:
 [openalexR](https://github.com/ropensci/openalexR)
 [tidayverse](https://tidyverse.org/)
 [openxlsx2](https://janmarvin.github.io/openxlsx2/)
