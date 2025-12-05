@@ -82,3 +82,5 @@ The Excel file consists of 14 worksheets:
 There is a filter string to remove columns in lines 27-43. Those columns can be commented out or removed to add additional columns to the Excel file.
 Where there is only one variable for the column, they should be integrated into the Excel file without issue.
 Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
+
+The code in this repository is Copyright Jason Friedmen, licensed under the MIT License.
