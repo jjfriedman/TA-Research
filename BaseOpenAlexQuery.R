@@ -10,7 +10,7 @@ library(openalexR)
 library(tidyverse)
 library(openxlsx2)
 
-options(openalexR.mailto = "jason.friedman@usask.ca") #Add email address to use polite pool / Only needs to be done once
+options(openalexR.mailto = "youremailaddress@goeshere.com") #Add email address to use polite pool / Only needs to be done once
 
 #Query String: Modify the variables below to adjust query
 QueryEntity = "works" #Entity

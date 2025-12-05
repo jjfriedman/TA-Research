@@ -1,15 +1,27 @@
 This is R code designed to query the [OpenAlex](https://openalex.org/) [API](https://docs.openalex.org/)
 and retrieve institutional research outputs. It then takes those outputs and converts it to an Excel file for ease of use.
 
-This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: (https://github.com/schauch/OpenAlexRFSCI2025)
+This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: (https://github.com/schauch/OpenAlexRFSCI2025).
+
+I am *NOT* R coder. This code represents my attempt to try to solve two problems with the OpenAlex web interface:
+1. That OpenAlex often doesn't play nice with Excel.
+2. That it takes a fire hose approach that can require removing a lot of columns depending on your needs.
+
+If you are an R coder, or just someone who knows more about R than I do, I welcome any feedback you have.
+
+I also want to acknowledge and thank the wonderful people at [OpenAlex](https://openalex.org/team) and the [openalexR project](https://docs.ropensci.org/openalexR/).
 
 <h2>Getting Started</h2>
+
+I wrote this code so that hopefully it can be used without any specific R knowledge or coding skills. The idea is that by replacing a few variables at the top, you'll be able to get a useful Excel file.
 
 For the basics of getting started, this [guide](https://rstudio-education.github.io/hopr/starting.html) may be helpful.
 
 First off, you'll need to install [R](https://cran.r-project.org/).
 
 You'll need software to edit and run code. I recommend (and use) the free and open source [RStudio](https://posit.co/products/open-source/rstudio/?sid=1).
+
+The main file is BaseOpenAlexQuery.R. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because OpenAlex [corresponding author data](https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding) is not reliable.
 
 The code should do this for you (lines 4-6), but you'll also need install 3 packages:
 [openalexR](https://github.com/ropensci/openalexR)
@@ -70,4 +82,3 @@ The Excel file consists of 14 worksheets:
 There is a filter string to remove columns in lines 27-43. Those columns can be commented out or removed to add additional columns to the Excel file.
 Where there is only one variable for the column, they should be integrated into the Excel file without issue.
 Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
-
