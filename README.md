@@ -3,7 +3,7 @@ and retrieve institutional research outputs. It then takes those outputs and con
 
 This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: (https://github.com/schauch/OpenAlexRFSCI2025).
 
-I am *NOT* R coder. This code represents my attempt to try to solve two problems with the OpenAlex web interface:
+I am *NOT* an R coder. This code represents my attempt to try to solve two problems with the OpenAlex web interface:
 1. That OpenAlex often doesn't play nice with Excel.
 2. That it takes a fire hose approach that can require removing a lot of columns depending on your needs.
 
