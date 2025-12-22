@@ -43,7 +43,7 @@ QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is Universit
 QueryType = "article" #Type  
 QuerySourceType = "journal" #Source Type  
 QueryStartDate = "2024-01-01" #Publication Start Date  
-QueryEndDate = "2024-12-31" #Publication End Date  
+QueryEndDate = "2024-12-31" #Publication End Date
 
 This code will only work with the [works entity](https://docs.openalex.org/api-entities/works).
 
@@ -53,19 +53,18 @@ click on the three dots and select "Show API query". You can then replace the sa
 You can also modify the type and source type (or remove them) if you don't want to use the defaults.
 
 ![Screenshot](OpenAlexScreenshot.png)
+![Screenshot](/images/OpenAlexScreenshot.png)
 
 Once that's done you're ready to run the code.
 
-The final Excel file is labeled "Dataset.xlsx" and will be located in a directory based on the timestamp.
-
-If everything works, there will be a message at the end indicating "The code successfully completed."
+The final Excel file is named according to query values and saved in the data folder. The naming convention is CurrentDate_OpenAlex_TA_QueryStartDate_QueryEndDate.xlsx, with all dates in YYYYMMDD format.
 
 The Excel file consists of 14 worksheets:
 
 1.  Guide: A listing of all of the worksheets  
 2.  Query:	Query Information (includes warnings for articles with more than 100 authors)  
-3.  Works:	All institutional Works
-4.  OAWorks:	All open access Works
+3.  Works: All institutional Works
+4.  OAWorks: All open access Works
 5.  GoldHybrid:	All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status  
 6.  AllAuthors:	All authors for all institutional works  
 7.  AllAffiliations:	All affiliations for all authors for all institutional works  
