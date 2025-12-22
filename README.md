@@ -52,7 +52,6 @@ click on the three dots and select "Show API query". You can then replace the sa
 
 You can also modify the type and source type (or remove them) if you don't want to use the defaults.
 
-![Screenshot](OpenAlexScreenshot.png)
 ![Screenshot](/images/OpenAlexScreenshot.png)
 
 Once that's done you're ready to run the code.
