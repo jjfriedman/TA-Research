@@ -43,7 +43,7 @@ QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is Universit
 QueryType = "article" #Type  
 QuerySourceType = "journal" #Source Type  
 QueryStartDate = "2024-01-01" #Publication Start Date  
-QueryEndDate = "2024-12-31" #Publication End Date  
+QueryEndDate = "2024-12-31" #Publication End Date
 
 This code will only work with the [works entity](https://docs.openalex.org/api-entities/works).
 
@@ -64,8 +64,8 @@ The Excel file consists of 14 worksheets:
 
 1.  Guide: A listing of all of the worksheets  
 2.  Query:	Query Information (includes warnings for articles with more than 100 authors)  
-3.  Works:	All institutional Works
-4.  OAWorks:	All open access Works
+3.  Works: All institutional Works
+4.  OAWorks: All open access Works
 5.  GoldHybrid:	All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status  
 6.  AllAuthors:	All authors for all institutional works  
 7.  AllAffiliations:	All affiliations for all authors for all institutional works  
@@ -79,8 +79,6 @@ The Excel file consists of 14 worksheets:
 
 <h2>For more advanced users:</h2>
 
-There is a filter string to remove columns in lines 27-43. Those columns can be commented out or removed to add additional columns to the Excel file.
-Where there is only one variable for the column, they should be integrated into the Excel file without issue.
-Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
+There is a filter string to remove columns in lines 62-82. Those columns can be commented out or removed to add additional columns to the Excel file. Where there is only one variable for the column, they should be integrated into the Excel file without issue. Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
 
 The code in this repository is Copyright Jason Friedmen, licensed under the MIT License.
