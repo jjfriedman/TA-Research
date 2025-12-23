@@ -57,12 +57,12 @@ Institutional_Works <- oa_fetch(
 )
 
 #Records query information, time stamp, and warning in data frame for future Export
-CurrentTime <- substr(Sys.time(),1,10)
+CurrentDate <- substr(Sys.time(),1,10)
 QueryWarnings = names(last.warning) #Save warning message
 QueryWarnings <- QueryWarnings[!QueryWarnings %in% c("Note: `oa_fetch` and `oa2df` now return new names for some columns in openalexR v2.0.0.\n      See NEWS.md for the list of changes.\n      Call `get_coverage()` to view the all updated columns and their original names in OpenAlex.\n\033[90mThis warning is displayed once every 8 hours.\033[39m")] #This code filters out a specific openalexr warning about column name changes.
 if (length(QueryWarnings) == 0) {QueryWarnings = "No warnings"} #Enters "No warnings" if there are no warnings
 QueryStructure <- c("Entity", "Institution ID", "Type", "Source Type", "Start Date", "End Date", "Timestamp", "Warnings") #Query labels
-QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentTime, QueryWarnings) #Query values
+QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentDate, QueryWarnings) #Query values
 Query <- data.frame(Request = QueryStructure, Value = QueryValues) #Create data frame for Query information
 
 #Generate initial works list
@@ -145,7 +145,7 @@ ListofWorksheets <- list("Guide" = GuideSheet,
 
 # Export file -------------------------------------------------------------
 
-OutputFile <- paste(CurrentTime, "OpenAlex_TA", QueryStartDate, QueryEndDate, ".xlsx", sep = "_") #Build output file name using query values
+OutputFile <- paste(CurrentDate, "OpenAlex_TA", QueryStartDate, QueryEndDate, ".xlsx", sep = "_") #Build output file name using query values
 OutputPath <- paste("./data/", OutputFile) #File path for results
 
 write_xlsx(ListofWorksheets, OutputPath)
