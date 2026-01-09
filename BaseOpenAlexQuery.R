@@ -43,15 +43,6 @@ FilterColumns = c(
   'grants'
 )
 
-#Use Current date and time to name directory
-CurrentWD = getwd() #Get current working directory
-CurrentTime <- substr(Sys.time(),1,19) #Get current time to the second
-CurrentTime <- str_replace(CurrentTime,' ','_') #Replace space with underscore
-CurrentTime <- str_replace_all(CurrentTime,':','_') #Replace : with underscore
-OutputPath <- paste("Output", CurrentTime,sep = '_') #File path for results
-dir.create(OutputPath) #Create output directory
-setwd(OutputPath) #Set new working directory for output
-
 #This code uses the query variables above to call the OpenAlex API
 Institutional_Works <- oa_fetch(
   entity = QueryEntity, #query type
@@ -66,11 +57,12 @@ Institutional_Works <- oa_fetch(
 )
 
 #Records query information, time stamp, and warning in data frame for future Export
+CurrentDate <- substr(Sys.time(),1,10)
 QueryWarnings = names(last.warning) #Save warning message
 QueryWarnings <- QueryWarnings[!QueryWarnings %in% c("Note: `oa_fetch` and `oa2df` now return new names for some columns in openalexR v2.0.0.\n      See NEWS.md for the list of changes.\n      Call `get_coverage()` to view the all updated columns and their original names in OpenAlex.\n\033[90mThis warning is displayed once every 8 hours.\033[39m")] #This code filters out a specific openalexr warning about column name changes.
 if (length(QueryWarnings) == 0) {QueryWarnings = "No warnings"} #Enters "No warnings" if there are no warnings
 QueryStructure <- c("Entity", "Institution ID", "Type", "Source Type", "Start Date", "End Date", "Timestamp", "Warnings") #Query labels
-QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentTime, QueryWarnings) #Query values
+QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentDate, QueryWarnings) #Query values
 Query <- data.frame(Request = QueryStructure, Value = QueryValues) #Create data frame for Query information
 
 #Generate initial works list
@@ -149,8 +141,12 @@ ListofWorksheets <- list("Guide" = GuideSheet,
   "APCs" = Institutional_APCS_NoAffiliation,
   "GoldHybridAPCs" = Institutional_GoldHybrid_APCs
   )
-write_xlsx(ListofWorksheets,"DataSet.xlsx")
 
-setwd(CurrentWD) #Return to old working directory
-                                                  
-paste("The code successfully completed. The Excel file is located here: ",CurrentWD,"/",OutputPath )
+
+# Export file -------------------------------------------------------------
+
+OutputFile <- paste(CurrentDate, "OpenAlex_TA", QueryStartDate, QueryEndDate, ".xlsx", sep = "_") #Build output file name using query values
+OutputPath <- paste("./data/", OutputFile) #File path for results
+
+write_xlsx(ListofWorksheets, OutputPath)
+
