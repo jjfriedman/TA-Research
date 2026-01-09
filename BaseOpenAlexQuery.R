@@ -20,8 +20,6 @@ QuerySourceType = "journal" #Source Type
 QueryStartDate = "2024-01-01" #Publication Start Date
 QueryEndDate = "2024-12-31" #Publication End Date
 
-InstitutionFilterString = paste0("https://openalex.org/", QueryInstitution_OpenAlex_ID) #Adds OpenAlex URL string to institution ID for filtering
-
 #Filter string Add/remove column headers as desired. Columns listed below are removed from the results.
 FilterColumns = c(
   'abstract', 
@@ -146,7 +144,8 @@ ListofWorksheets <- list("Guide" = GuideSheet,
 # Export file -------------------------------------------------------------
 
 OutputFile <- paste(CurrentDate, "OpenAlex_TA", QueryStartDate, QueryEndDate, ".xlsx", sep = "_") #Build output file name using query values
-OutputPath <- paste("./data/", OutputFile) #File path for results
+OutputPath <- paste0("./data/", OutputFile) #File path for results
 
 write_xlsx(ListofWorksheets, OutputPath)
 
+paste("The code successfully completed. The Excel file is located here: ",OutputPath )
