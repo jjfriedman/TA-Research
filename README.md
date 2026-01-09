@@ -11,25 +11,35 @@ If you are an R coder, or just someone who knows more about R than I do, I welco
 
 I also want to acknowledge and thank the wonderful people at [OpenAlex](https://openalex.org/team) and the [openalexR project](https://docs.ropensci.org/openalexR/).
 
-<h2>Getting Started</h2>
+## Installation
 
 I wrote this code so that hopefully it can be used without any specific R knowledge or coding skills. The idea is that by replacing a few variables at the top, you'll be able to get a useful Excel file.
 
 For the basics of getting started, this [guide](https://rstudio-education.github.io/hopr/starting.html) may be helpful.
 
-First off, you'll need to install [R](https://cran.r-project.org/).
+1\. Install [R](https://cran.r-project.org/).
 
-You'll need software to edit and run code. I recommend (and use) the free and open source [RStudio](https://posit.co/products/open-source/rstudio/?sid=1).
+2\. Install [RStudio](https://posit.co/products/open-source/rstudio/?sid=1) to edit and run the project.
+
+3\. [Download, clone, or fork](https://docs.github.com/en/get-started/start-your-journey/downloading-files-from-github) the repository files
+
+### Dependencies:
+
+The code uses three R packages (instructions for installing and loading them are in the script):
+
+[openalexR](https://cran.r-project.org/web/packages/openalexR/index.html) - Information and recent updates available on [GitHub](https://github.com/ropensci/openalexR)
+
+[tidyverse](https://tidyverse.org/)
+
+[openxlsx2](https://cran.r-project.org/web/packages/openxlsx2/index.html)
+
+## Usage
 
 The main file is BaseOpenAlexQuery.R. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because OpenAlex [corresponding author data](https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding) is not reliable.
 
-The code should do this for you (lines 4-6), but you'll also need to install 3 packages:
-[openalexR](https://github.com/ropensci/openalexR)
-[tidayverse](https://tidyverse.org/)
-[openxlsx2](https://janmarvin.github.io/openxlsx2/)
-
 **Important**
 On line 13, you'll need to enter your email address to use the OpenAlex [polite pool](https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication#the-polite-pool). 
+**Important** On line 13, you'll need to enter your email address to use the OpenAlex [polite pool](https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication#the-polite-pool).
 
 options(openalexR.mailto = "youremailaddress@goeshere.com")
 

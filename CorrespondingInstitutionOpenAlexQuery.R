@@ -1,9 +1,9 @@
 #This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: https://github.com/schauch/OpenAlexRFSCI2025
 
-#Install and include necessary packages. Install only needs to be run once.
-install.packages("openalexR") #Package to query OpenAlex
-install.packages("tidyverse") #Package to work with data more easily
-install.packages("openxlsx2") #Package to export to Excel
+#Install necessary packages by removing the # symbol before the next three lines and running them. Install only needs to be run once.
+# install.packages("openalexR") #Package to query OpenAlex
+# install.packages("tidyverse") #Package to work with data more easily
+# install.packages("openxlsx2") #Package to export to Excel
 
 #Load the necessary packages
 library(openalexR)
