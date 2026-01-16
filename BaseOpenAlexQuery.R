@@ -11,15 +11,18 @@ library(tidyverse)
 library(openxlsx2)
 
 #Query Settings
+#As of February 13, OpenAlex will require an API key (available free).
+#To find your API key, Go to openalex.org and create a free account
+#Copy your API key from https://openalex.org/settings/api
 
-options(openalexR.mailto = "youremailaddress@goeshere.com") #Add email address to use polite pool / Only needs to be done once
+file.edit("~/.Rprofile") #Opens the Rprofile file. You will need to copy and paste options(openalexR.apikey = "YOUR API KEY") into the file. Make sure to include the quotation marks around the API key. This only needs to be done once (or if you receive a new API key)
 
 #Query String: Modify the variables below to adjust query
 QueryEntity = "works" #Entity
 QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.
 QueryType = "article" #Type
 QuerySourceType = "journal" #Source Type
-QueryStartDate = "2024-01-01" #Publication Start Date
+QueryStartDate = "2024-09-01" #Publication Start Date
 QueryEndDate = "2024-12-31" #Publication End Date
 
 
@@ -31,7 +34,6 @@ Institutional_Works <- oa_fetch(
   primary_location.source.type = QuerySourceType, #limit to journal articles
   from_publication_date = QueryStartDate, #start range
   to_publication_date = QueryEndDate, #end range
-#  mailto = oa_email(), #To use polite API if not set above
   verbose = TRUE,
 #  options = list("data-version" = 1), #Toggle to use version 1/old version of OpenAlex
 )
@@ -46,7 +48,7 @@ QueryWarnings = names(last.warning) #Save warning message
 QueryWarnings <- QueryWarnings[!QueryWarnings %in% c("Note: `oa_fetch` and `oa2df` now return new names for some columns in openalexR v2.0.0.\n      See NEWS.md for the list of changes.\n      Call `get_coverage()` to view the all updated columns and their original names in OpenAlex.\n\033[90mThis warning is displayed once every 8 hours.\033[39m")] #This code filters out a specific openalexr warning about column name changes.
 if (length(QueryWarnings) == 0) {QueryWarnings = "No warnings"} #Enters "No warnings" if there are no warnings
 QueryStructure <- c("Entity", "Institution ID", "Type", "Source Type", "Start Date", "End Date", "Timestamp", "Warnings") #Query labels
-QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentDate, QueryWarnings) #Query values
+QueryValues <- c(QueryEntity, QueryInstitution_OpenAlex_ID, QueryType, QuerySourceType, QueryStartDate, QueryEndDate, CurrentTime, QueryWarnings) #Query values
 Query <- data.frame(Request = QueryStructure, Value = QueryValues) #Create data frame for Query information
 
 #Filter string Add/remove column headers as desired. Columns listed below are removed from the results.

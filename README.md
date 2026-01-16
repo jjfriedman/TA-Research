@@ -38,14 +38,15 @@ The code uses three R packages (instructions for installing and loading them are
 The main file is BaseOpenAlexQuery.R. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because OpenAlex [corresponding author data](https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding) is not reliable.
 
 **Important**
-On line 13, you'll need to enter your email address to use the OpenAlex [polite pool](https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication#the-polite-pool). 
-**Important** On line 13, you'll need to enter your email address to use the OpenAlex [polite pool](https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication#the-polite-pool).
+OpenAlex announced via their users list that an API key will be required starting February 13.
 
-options(openalexR.mailto = "youremailaddress@goeshere.com")
+In order to access your API key, you need to register a free account with OpenAlex and go to the [Settings page](https://openalex.org/settings/api) to access your API key.
 
-This code does not support API key access.
+Following the recommendation of OpenAlexR, the API key is stored in the .Rprofile file.
 
-The main query code is on lines 16-21:
+This line needs to be added: options(openalexR.apikey = "YOUR API KEY")
+
+The main query code is on lines 20-26:
 
 #Query String: Modify the variables below to adjust query  
 QueryEntity = "works" #Entity  
