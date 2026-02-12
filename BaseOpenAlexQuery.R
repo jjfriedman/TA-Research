@@ -11,7 +11,7 @@ library(tidyverse)
 library(openxlsx2)
 
 #Query Settings
-#As of February 13, OpenAlex will require an API key (available free).
+#As of February 13, 2026, OpenAlex will require an API key (available free).
 #To find your API key, Go to openalex.org and create a free account
 #Copy your API key from https://openalex.org/settings/api
 
@@ -69,7 +69,9 @@ FilterColumns = c(
   'counts_by_year',
   'topics',
   'keywords',
-  'grants'
+  'awards',
+  'funders',
+  'sustainable_development_goals'
 )
 
 #Generate initial works list
