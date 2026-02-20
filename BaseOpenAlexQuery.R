@@ -77,7 +77,7 @@ FilterColumns = c(
 #Generate initial works list
 Institutional_FilteredWorks <- Institutional_Works %>% select(-any_of(FilterColumns)) #Removes columns indicated above
 Institutional_FilteredWorksOnly <- Institutional_FilteredWorks %>% select(-any_of(c("authorships","apc"))) #Removes nested data authorships/apc for a clean works list for export
-Institutional_OAWorksOnly <- filter(Institutional_FilteredWorksOnly,is_oa == TRUE) #Generate OA works list
+Institutional_OAWorksOnly <- filter(Institutional_FilteredWorksOnly,is_oa_anywhere == TRUE) #Generate OA works list
 Institutional_GoldHybrid <- filter(Institutional_FilteredWorksOnly,oa_status == "gold" | oa_status == "hybrid") #Generate Gold/Hybrid only works list (possible APC paid)
 
 #Generate initial authors list
