@@ -35,12 +35,12 @@ The code uses three R packages (instructions for installing and loading them are
 
 ## Usage
 
-The main file is BaseOpenAlexQuery.R. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because OpenAlex [corresponding author data](https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding) is not reliable.
+The main file is BaseOpenAlexQuery.R. This file is designed to capture all of an institution's output in OpenAlex. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because  it is unclear how reliable OpenAlex corresponding author data is.
 
 **Important**
-OpenAlex announced via their users list that an API key will be required starting February 13.
+OpenAlex announced via their users list that an API key is required.
 
-In order to access your API key, you need to register a free account with OpenAlex and go to the [Settings page](https://openalex.org/settings/api) to access your API key.
+In order to access your API key, you need to register a free account with OpenAlex and go to the [Settings page](https://openalex.org/settings/api-key) to access your API key.
 
 Following the recommendation of OpenAlexR, the API key is stored in the .Rprofile file.
 
@@ -56,10 +56,10 @@ QuerySourceType = "journal" #Source Type
 QueryStartDate = "2024-01-01" #Publication Start Date  
 QueryEndDate = "2024-12-31" #Publication End Date
 
-This code will only work with the [works entity](https://docs.openalex.org/api-entities/works).
+This code will only work with the [works entity](https://developers.openalex.org/api-reference/works).
 
-In order to design your query, the easiest way is to use the OpenAlex web interface, copy the API link, and paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=authorships.institutions.lineage:i32625721,type:types/article,primary_location.source.type:source-types/journal,publication_year:2024) above,
-click on the three dots and select "Show API query". You can then replace the sample ID above with your institution's ID. **Please note, you must capitalize the i in the institutional identifier for the code to work.
+In order to design your query, the easiest way is to use the OpenAlex web interface, copy the API link, and paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=publication_year:2024-2024,type:article,authorships.institutions.lineage:i32625721,primary_location.source.type:journal) above,
+click on the three dots in the upper right and select "Copy API call". You'll then likely want to copy the call into a text editor to see each variable. You can then replace the sample ID above with your institution's ID. **Please note, you must capitalize the i in the institutional identifier for the code to work.
 
 You can also modify the type and source type (or remove them) if you don't want to use the defaults.
 
@@ -88,7 +88,7 @@ The Excel file consists of 14 worksheets:
 
 <h2>For more advanced users:</h2>
 
-There is a filter string to remove columns in lines 27-43. Those columns can be commented out or removed to add additional columns to the Excel file.
+There is a filter string to remove columns in lines 56-74. Those columns can be commented out or removed to add additional columns to the Excel file.
 Where there is only one variable for the column, they should be integrated into the Excel file without issue.
 Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
 
