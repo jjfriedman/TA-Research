@@ -38,7 +38,7 @@ The code uses three R packages (instructions for installing and loading them are
 The main file is BaseOpenAlexQuery.R. This file is designed to capture all of an institution's output in OpenAlex. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because  it is unclear how reliable OpenAlex corresponding author data is.
 
 **Important**
-OpenAlex announced via their users list that an API key is required.
+As of February 13, 2026, an API key is required.
 
 In order to access your API key, you need to register a free account with OpenAlex and go to the [Settings page](https://openalex.org/settings/api-key) to access your API key.
 
