@@ -37,6 +37,8 @@ The code uses three R packages (instructions for installing and loading them are
 
 The main file is BaseOpenAlexQuery.R. This file is designed to capture all of an institution's output in OpenAlex. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because  it is unclear how reliable OpenAlex corresponding author data is.
 
+Alternatively, you can use PublisherOpenAlexQuery.R. This file is designed to capture all of an insitution's output _from specific publishers_ in OpenAlex. Multiple publishers can be used by separating identifiers with the | symbol for QueryPublisher (line 27). The instructions below use the Base file, but both files run identical code with minor tweaks.
+
 **Important**
 As of February 13, 2026, an API key is required.
 
