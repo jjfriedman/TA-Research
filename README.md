@@ -35,9 +35,9 @@ The code uses three R packages (instructions for installing and loading them are
 
 ## Usage
 
-The main file is BaseOpenAlexQuery.R. This file is designed to capture all of an institution's output in OpenAlex. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because  it is unclear how reliable OpenAlex corresponding author data is.
+There are two main files: BaseOpenAlexQuery.R and BaseOpenAlexRORQuery.R. Both files are designed to capture all of an institution's output in OpenAlex and work similarly. The only difference is that BaseOpenAlexQuery.R uses the proprietary OpenAlex institutional ID and BaseOpenAlexRORQuery.R uses ROR (Research Organization Registry) IDs. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because  it is unclear how reliable OpenAlex corresponding author data is.
 
-Alternatively, you can use PublisherOpenAlexQuery.R. This file is designed to capture all of an insitution's output _from specific publishers_ in OpenAlex. Multiple publishers can be used by separating identifiers with the | symbol for QueryPublisher (line 27). The instructions below use the Base file, but both files run identical code with minor tweaks.
+Alternatively, you can use PublisherOpenAlexQuery.R or PubliserOpenAlexRORQuery.R. These files are designed to capture all of an insitution's output _from specific publishers_ in OpenAlex. Multiple publishers can be used by separating identifiers with the | symbol for QueryPublisher (line 27). The instructions below use the Base files, but both files run identical code with minor tweaks.
 
 **Important**
 As of February 13, 2026, an API key is required.
@@ -52,7 +52,7 @@ The main query code is on lines 20-26:
 
 #Query String: Modify the variables below to adjust query  
 QueryEntity = "works" #Entity  
-QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.  
+QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.  *OR* QueryInstitution_ROR_ID = "https://ror.org/010x8gc63" #ROR ID is University of Saskatchewan.
 QueryType = "article" #Type  
 QuerySourceType = "journal" #Source Type  
 QueryStartDate = "2024-01-01" #Publication Start Date  
@@ -61,7 +61,9 @@ QueryEndDate = "2024-12-31" #Publication End Date
 This code will only work with the [works entity](https://developers.openalex.org/api-reference/works).
 
 In order to design your query, the easiest way is to use the OpenAlex web interface, copy the API link, and paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=publication_year:2024-2024,type:article,authorships.institutions.lineage:i32625721,primary_location.source.type:journal) above,
-click on the three dots in the upper right and select "Copy API call". You'll then likely want to copy the call into a text editor to see each variable. You can then replace the sample ID above with your institution's ID. **Please note, you must capitalize the i in the institutional identifier for the code to work.
+click on the three dots in the upper right and select "Copy API call". You'll then likely want to copy the call into a text editor to see each variable. 
+
+You can then replace the sample ID above with your institution's OpenAlex ID *OR* ROR ID depending on which file you're using. **Please note, you must capitalize the i in the institutional identifier for the code to work.
 
 You can also modify the type and source type (or remove them) if you don't want to use the defaults.
 
