@@ -76,6 +76,9 @@ FilterColumns = c(
   'sustainable_development_goals'
 )
 
+# Convert OpenAlex Institution Query string into a vector for filtering, needed with multiple institutions:
+InstitutionRORs <- strsplit(QueryInstitution_ROR_ID, "\\|")[[1]]
+
 #Generate initial works list
 Institutional_FilteredWorks <- Institutional_Works %>% select(-any_of(FilterColumns)) #Removes columns indicated above
 Institutional_FilteredWorksOnly <- Institutional_FilteredWorks %>% select(-any_of(c("authorships","apc"))) #Removes nested data authorships/apc for a clean works list for export
@@ -89,7 +92,7 @@ Institutional_AllAuthorsOnly <- Institutional_AllAuthors %>% select(-any_of(c("a
 #Generate affiliations list
 AllAuthorAffiliations <- unnest(Institutional_AllAuthors, authorships_affiliations, names_sep = "_") #Unnests affiliations so that all affiliations are listed
 AllAuthorAffiliations_NoAPC <- AllAuthorAffiliations %>% select(!"apc") #Removes APC data for clean export
-Institutional_AuthorsOnly <- filter(AllAuthorAffiliations_NoAPC, authorships_affiliations_ror == QueryInstitution_ROR_ID) #Filters affiliations to institution only
+Institutional_AuthorsOnly <- AllAuthorAffiliations_NoAPC %>% filter(authorships_affiliations_ror %in% InstitutionRORs) #Filters affiliations to institution only
 Institutional_GoldHybridAuthorsOnly <- filter(Institutional_AuthorsOnly, oa_status == "gold" | oa_status == "hybrid")
 
 #Generate corresponding authors list
@@ -98,7 +101,7 @@ Corresponding_AuthorsAffilations <- unnest(Corresponding_only, authorships_affil
 Corresponding_AuthorsAffilations_NoAPC <- Corresponding_AuthorsAffilations %>% select(!"apc") #Removes APC data for clean export
 
 #Generate institutional corresponding authors list
-Institutional_CorrespondingAuthors <- filter(Corresponding_AuthorsAffilations, authorships_affiliations_ror == QueryInstitution_ROR_ID) #Filters corresponding authors list for institutional list
+Institutional_CorrespondingAuthors <- Corresponding_AuthorsAffilations %>% filter(authorships_affiliations_ror %in% InstitutionRORs) #Filters corresponding authors list for institutional list
 Institutional_CorrespondingAuthors_NoAPC <- Institutional_CorrespondingAuthors %>% select(!"apc") #Removes APC data for clean export
 Institutional_GoldHybrid_CorrespondingAuthors_NoAPC <- filter(Institutional_CorrespondingAuthors_NoAPC, oa_status == "gold" | oa_status == "hybrid") #Filters institutional corresponding authors list for gold and hybrid only
 
@@ -140,20 +143,20 @@ GuideSheet <- data.frame(Worksheet = WorksheetNames, Description = WorksheetDesc
 
 #Generate Excel file with worksheets for each data frame
 ListofWorksheets <- list("Guide" = GuideSheet,
-  "Query" = Query,
-  "Works" = Institutional_FilteredWorksOnly, 
-  "OAWorks" = Institutional_OAWorksOnly,
-  "GoldHybrid" = Institutional_GoldHybrid,
-  "AllAuthors" = Institutional_AllAuthorsOnly,
-  "AllAffiliations" = AllAuthorAffiliations_NoAPC,
-  "InstAuthors" = Institutional_AuthorsOnly, 
-  "InstAuthorsGoldHybrid" = Institutional_GoldHybridAuthorsOnly,
-  "Corresponding" = Corresponding_AuthorsAffilations_NoAPC, 
-  "InstCorresponding" = Institutional_CorrespondingAuthors_NoAPC, 
-  "InstGoldHybridCorresponding" = Institutional_GoldHybrid_CorrespondingAuthors_NoAPC,
-  "APCs" = Institutional_APCS_NoAffiliation,
-  "GoldHybridAPCs" = Institutional_GoldHybrid_APCs
-  )
+                         "Query" = Query,
+                         "Works" = Institutional_FilteredWorksOnly, 
+                         "OAWorks" = Institutional_OAWorksOnly,
+                         "GoldHybrid" = Institutional_GoldHybrid,
+                         "AllAuthors" = Institutional_AllAuthorsOnly,
+                         "AllAffiliations" = AllAuthorAffiliations_NoAPC,
+                         "InstAuthors" = Institutional_AuthorsOnly, 
+                         "InstAuthorsGoldHybrid" = Institutional_GoldHybridAuthorsOnly,
+                         "Corresponding" = Corresponding_AuthorsAffilations_NoAPC, 
+                         "InstCorresponding" = Institutional_CorrespondingAuthors_NoAPC, 
+                         "InstGoldHybridCorresponding" = Institutional_GoldHybrid_CorrespondingAuthors_NoAPC,
+                         "APCs" = Institutional_APCS_NoAffiliation,
+                         "GoldHybridAPCs" = Institutional_GoldHybrid_APCs
+)
 
 
 #Export
