@@ -52,7 +52,7 @@ The main query code is on lines 20-26:
 
 #Query String: Modify the variables below to adjust query  
 QueryEntity = "works" #Entity  
-QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.  *OR* QueryInstitution_ROR_ID = "https://ror.org/010x8gc63" #ROR ID is University of Saskatchewan.
+QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.  *OR* QueryInstitution_ROR_ID = "https://ror.org/010x8gc63" #ROR ID is University of Saskatchewan. Multiple RORs can be used with a | (no spaces between each ROR URL).
 QueryType = "article" #Type  
 QuerySourceType = "journal" #Source Type  
 QueryStartDate = "2024-01-01" #Publication Start Date  
