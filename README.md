@@ -1,3 +1,15 @@
+**New work in progress additions to main code**
+
+BaseOpenAlexDOIQuery.R: Queries the OpenAlex database based on a list of DOIs. DOIs to be supplied in the QueryDOI variable with "" and , separators. Output resembles the two institutional queries, but without filtering.
+
+BaseOpenAlexISSNQuery.R: Queries the OpenAlex database using the [sources](https://developers.openalex.org/api-reference/sources) entity based on a list of ISSNs. ISSNs to be supplied in the QueryISSN variable with "" and , separators. Output includes OA only filtering and a comprehensive ISSN list.
+
+OpenAlexKBARTRetriever_v3.R: Queries the OpenAlex database based on a [KBART](https://www.niso.org/standards-committees/kbart) file and retrieves works counts for each row to determine the Open Access status per journal based on the coverage period. This code only works with Serials. It's experimental and was written with assistance from Microsoft Copilot. **Warning** The code as written makes a lot of queries based on the size of the KBART file. You may need to break up the file depending on your OpenAlex API credit.
+
+All three files are works in progress, may contain bugs, and should be used with caution, but feedback is welcome!
+
+**Main code**
+
 This is R code designed to query the [OpenAlex](https://openalex.org/) [API](https://docs.openalex.org/)
 and retrieve institutional research outputs. It then takes those outputs and converts it to an Excel file for ease of use.
 
