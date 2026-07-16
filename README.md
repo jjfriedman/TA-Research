@@ -6,7 +6,9 @@ BaseOpenAlexISSNQuery.R: Queries the OpenAlex database using the [sources](https
 
 OpenAlexKBARTRetriever_v3.R: Queries the OpenAlex database based on a [KBART](https://www.niso.org/standards-committees/kbart) file and retrieves works counts for each row to determine the Open Access status per journal based on the coverage period. This code only works with Serials. It's experimental and was written with assistance from Microsoft Copilot. **Warning** The code as written makes a lot of queries based on the size of the KBART file. You may need to break up the file depending on your OpenAlex API credit.
 
-All three files are works in progress, may contain bugs, and should be used with caution, but feedback is welcome!
+PublisherOpenAlexSourcesQuery.R: Queries the OpenAlex database based on one or more publisher IDs. It returns a sources list, OA sources, ISSNs, and ISSNs with APCs. The main use case I've found so far is looking up ISSNs/ISSN-ls.
+
+All four files are works in progress, may contain bugs, and should be used with caution, but feedback is welcome!
 
 **Main code**
 
