@@ -78,7 +78,7 @@ DOI_GoldHybrid <- filter(DOI_FilteredWorksOnly,oa_status == "gold" | oa_status =
 
 #Generate initial authors list
 DOI_AllAuthors <- unnest(DOI_FilteredWorks, authorships, names_sep = "_") #Unnests authorships so that all authors are listed
-DOI_AllAuthorsOnly <- Institutional_DOIAuthors %>% select(-any_of(c("authorships_affiliations","apc"))) #Removes nested data affiliations and apc for a clean authors list for export
+DOI_AllAuthorsOnly <- DOI_AllAuthors %>% select(-any_of(c("authorships_affiliations","apc"))) #Removes nested data affiliations and apc for a clean authors list for export
 
 #Generate affiliations list
 AllAuthorAffiliations <- unnest(DOI_AllAuthors, authorships_affiliations, names_sep = "_") #Unnests affiliations so that all affiliations are listed
@@ -108,7 +108,9 @@ WorksheetNames <- c("Query",
                     "GoldHybridAPCs")
 WorksheetDescriptions <- c("Query Information (includes warnings for articles with more than 100 authors)",
                            "All works",
-                           "All open access Works",
+                           "All open access works",
+                           "All Gold and Hybrid works",
+                           "All authors for all works",
                            "All affiliations for all authors for all works",
                            "All corresponding authors for all works Note: This data is a work in progress https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding",
                            "All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid",
@@ -123,7 +125,7 @@ ListofWorksheets <- list("Guide" = GuideSheet,
                          "GoldHybrid" = DOI_GoldHybrid,
                          "AllAuthors" = DOI_AllAuthorsOnly,
                          "AllAffiliations" = AllAuthorAffiliations_NoAPC,
-                         "Corresponding" = DOI_AuthorsAffilations_NoAPC, 
+                         "Corresponding" = Corresponding_AuthorsAffilations_NoAPC, 
                          "APCs" = DOI_APCS_NoAffiliation,
                          "GoldHybridAPCs" = DOI_GoldHybrid_APCs
 )
