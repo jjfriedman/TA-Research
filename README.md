@@ -4,7 +4,7 @@ BaseOpenAlexDOIQuery.R: Queries the OpenAlex database based on a list of DOIs. D
 
 BaseOpenAlexISSNQuery.R: Queries the OpenAlex database using the [sources](https://developers.openalex.org/api-reference/sources) entity based on a list of ISSNs. ISSNs to be supplied in the QueryISSN variable with "" and , separators. Output includes OA only filtering and a comprehensive ISSN list.
 
-OpenAlexKBARTRetriever_v3.R: Queries the OpenAlex database based on a [KBART](https://www.niso.org/standards-committees/kbart) file and retrieves works counts for each row to determine the Open Access status per journal based on the coverage period. This code only works with Serials. It's experimental and was written with assistance from Microsoft Copilot. **Warning** The code as written makes a lot of queries based on the size of the KBART file. You may need to break up the file depending on your OpenAlex API credit.
+
 
 PublisherOpenAlexSourcesQuery.R: Queries the OpenAlex database based on one or more publisher IDs. It returns a sources list, OA sources, ISSNs, and ISSNs with APCs. The main use case I've found so far is looking up ISSNs/ISSN-ls.
 
@@ -109,5 +109,41 @@ The Excel file consists of 14 worksheets:
 There is a filter string to remove columns in lines 56-74. Those columns can be commented out or removed to add additional columns to the Excel file.
 Where there is only one variable for the column, they should be integrated into the Excel file without issue.
 Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
+
+## KBART Retriever
+OpenAlexKBARTRetriever_v3.R: Queries the OpenAlex database based on a [KBART](https://www.niso.org/standards-committees/kbart) file and retrieves works counts for each row to determine the Open Access status per journal based on the coverage period. This code only works with Serials. It's experimental and was written with assistance from Microsoft Copilot. 
+
+**Warning** The code as written makes a lot of queries based on the size of the KBART file. You may need to break up the file depending on your OpenAlex API credit level.
+
+The code searches by online_identifier as the default and where that is blank will use the print_identifier.
+
+# Instructions
+After loading the necessary packages (see Dependencies above), there are two required variables:
+
+kbart_file (line 26) is the path and name of your KBART file
+
+output_xlsx (line 29) is the path and name of results Excel file you want to save.
+
+Section 1 has some additional optional variables:
+
+open_end_to (line 33) will set an upper limit on any active journals without an end date.
+
+If you want to perform a test run to see what the results look like rather than the whole file, you can do that with test_n (line 38). The default is NULL.
+
+OpenAlexVerboseMode (line 41) is set to TRUE by default, but if you don't want the output in your terminal you can set it to false.
+
+When the code completes, you'll have an Excel file consisting of the following worksheets:
+
+counts_by_kbart_row: the main file that includes the OA status counts for each row of the KBART
+
+source_matches: a combination of the KBART identifiers with the OpanAlex identifiers
+
+query_log: a diagnostic log for potential troubleshooting
+
+query_issues: the diagnostic log filtered specifically for issues
+
+summary: query counts and flags
+
+preflight_diagnostic: the results of the first row for troubleshooting
 
 The code in this repository is Copyright Jason Friedmen, licensed under the MIT License.
