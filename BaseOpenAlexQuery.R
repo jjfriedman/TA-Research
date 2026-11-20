@@ -35,6 +35,7 @@ Institutional_Works <- oa_fetch(
   from_publication_date = QueryStartDate, #start range
   to_publication_date = QueryEndDate, #end range
   verbose = TRUE,
+  options = list("include_pulled" = TRUE), #Toggle to include is_pulled works (https://help.openalex.org/data/works/pulled/). Pulled works are included by default as they were likely originally published under the agreement. Comment out (or set to false) to exclude pulled works.
 #  options = list("data-version" = 1), #Toggle to use version 1/old version of OpenAlex
 )
 
