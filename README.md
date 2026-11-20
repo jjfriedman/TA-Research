@@ -1,9 +1,3 @@
----
-
-editor_options: 
-  markdown: 
-    wrap: sentence
----
 
 **New work in progress additions to main code**
 
