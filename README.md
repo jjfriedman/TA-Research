@@ -8,7 +8,7 @@ BaseOpenAlexISSNQuery.R: Queries the OpenAlex database using the [sources](https
 
 PublisherOpenAlexSourcesQuery.R: Queries the OpenAlex database based on one or more publisher IDs. It returns a sources list, OA sources, ISSNs, and ISSNs with APCs. The main use case I've found so far is looking up ISSNs/ISSN-ls.
 
-All four files are works in progress, may contain bugs, and should be used with caution, but feedback is welcome!
+All three files are works in progress, may contain bugs, and should be used with caution, but feedback is welcome!
 
 **Main code**
 
