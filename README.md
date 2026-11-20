@@ -1,10 +1,15 @@
+---
+
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
 **New work in progress additions to main code**
 
 BaseOpenAlexDOIQuery.R: Queries the OpenAlex database based on a list of DOIs. DOIs to be supplied in the QueryDOI variable with "" and , separators. Output resembles the two institutional queries, but without filtering.
 
 BaseOpenAlexISSNQuery.R: Queries the OpenAlex database using the [sources](https://developers.openalex.org/api-reference/sources) entity based on a list of ISSNs. ISSNs to be supplied in the QueryISSN variable with "" and , separators. Output includes OA only filtering and a comprehensive ISSN list.
-
-
 
 PublisherOpenAlexSourcesQuery.R: Queries the OpenAlex database based on one or more publisher IDs. It returns a sources list, OA sources, ISSNs, and ISSNs with APCs. The main use case I've found so far is looking up ISSNs/ISSN-ls.
 
@@ -12,14 +17,11 @@ All three files are works in progress, may contain bugs, and should be used with
 
 **Main code**
 
-This is R code designed to query the [OpenAlex](https://openalex.org/) [API](https://docs.openalex.org/)
-and retrieve institutional research outputs. It then takes those outputs and converts it to an Excel file for ease of use.
+This is R code designed to query the [OpenAlex](https://openalex.org/) [API](https://docs.openalex.org/) and retrieve institutional research outputs. It then takes those outputs and converts it to an Excel file for ease of use.
 
-This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: (https://github.com/schauch/OpenAlexRFSCI2025).
+This code is inspired by the code developed by Teresa Schultz for her FSCI 2025 Workshop available here: (<https://github.com/schauch/OpenAlexRFSCI2025>).
 
-I am *NOT* an R coder. This code represents my attempt to try to solve two problems with the OpenAlex web interface:
-1. That OpenAlex often doesn't play nice with Excel.
-2. That it takes a fire hose approach that can require removing a lot of columns depending on your needs.
+I am *NOT* an R coder. This code represents my attempt to try to solve two problems with the OpenAlex web interface: 1. That OpenAlex often doesn't play nice with Excel. 2. That it takes a fire hose approach that can require removing a lot of columns depending on your needs.
 
 If you are an R coder, or just someone who knows more about R than I do, I welcome any feedback you have.
 
@@ -49,12 +51,11 @@ The code uses three R packages (instructions for installing and loading them are
 
 ## Usage
 
-There are two main files: BaseOpenAlexQuery.R and BaseOpenAlexRORQuery.R. Both files are designed to capture all of an institution's output in OpenAlex and work similarly. The only difference is that BaseOpenAlexQuery.R uses the proprietary OpenAlex institutional ID and BaseOpenAlexRORQuery.R uses ROR (Research Organization Registry) IDs. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because  it is unclear how reliable OpenAlex corresponding author data is.
+There are two main files: BaseOpenAlexQuery.R and BaseOpenAlexRORQuery.R. Both files are designed to capture all of an institution's output in OpenAlex and work similarly. The only difference is that BaseOpenAlexQuery.R uses the proprietary OpenAlex institutional ID and BaseOpenAlexRORQuery.R uses ROR (Research Organization Registry) IDs. There is a similar, experimental file called CorrespondingInstitutionOpenAlexQuery.R. However, I do *NOT* recommend using this file other than as a comparison, because it is unclear how reliable OpenAlex corresponding author data is.
 
-Alternatively, you can use PublisherOpenAlexQuery.R or PubliserOpenAlexRORQuery.R. These files are designed to capture all of an insitution's output _from specific publishers_ in OpenAlex. Multiple publishers can be used by separating identifiers with the | symbol for QueryPublisher (line 27). The instructions below use the Base files, but both files run identical code with minor tweaks.
+Alternatively, you can use PublisherOpenAlexQuery.R or PubliserOpenAlexRORQuery.R. These files are designed to capture all of an insitution's output *from specific publishers* in OpenAlex. Multiple publishers can be used by separating identifiers with the \| symbol for QueryPublisher (line 27). The instructions below use the Base files, but both files run identical code with minor tweaks.
 
-**Important**
-As of February 13, 2026, an API key is required.
+**Important** As of February 13, 2026, an API key is required.
 
 In order to access your API key, you need to register a free account with OpenAlex and go to the [Settings page](https://openalex.org/settings/api-key) to access your API key.
 
@@ -64,20 +65,18 @@ This line needs to be added: options(openalexR.apikey = "YOUR API KEY")
 
 The main query code is on lines 20-26:
 
-#Query String: Modify the variables below to adjust query  
-QueryEntity = "works" #Entity  
-QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work.  *OR* QueryInstitution_ROR_ID = "https://ror.org/010x8gc63" #ROR ID is University of Saskatchewan. Multiple RORs can be used with a | (no spaces between each ROR URL).
-QueryType = "article" #Type  
-QuerySourceType = "journal" #Source Type  
-QueryStartDate = "2024-01-01" #Publication Start Date  
+#Query String: Modify the variables below to adjust query\
+QueryEntity = "works" #Entity\
+QueryInstitution_OpenAlex_ID = "I32625721" #OpenAlex Institution ID is University of Saskatchewan. Must use capital I for filters to work. *OR* QueryInstitution_ROR_ID = "<https://ror.org/010x8gc63>" #ROR ID is University of Saskatchewan. Multiple RORs can be used with a \| (no spaces between each ROR URL). QueryType = "article" #Type\
+QuerySourceType = "journal" #Source Type\
+QueryStartDate = "2024-01-01" #Publication Start Date\
 QueryEndDate = "2024-12-31" #Publication End Date
 
 This code will only work with the [works entity](https://developers.openalex.org/api-reference/works).
 
-In order to design your query, the easiest way is to use the OpenAlex web interface, copy the API link, and paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=publication_year:2024-2024,type:article,authorships.institutions.lineage:i32625721,primary_location.source.type:journal) above,
-click on the three dots in the upper right and select "Copy API call". You'll then likely want to copy the call into a text editor to see each variable. 
+In order to design your query, the easiest way is to use the OpenAlex web Basic interface to build your query, switch to the Advanced interface and copy/paste the relevant components into the appropriate fields. For the [default example](https://openalex.org/works?page=1&filter=publication_year:2024-2024,type:article,authorships.institutions.lineage:i32625721,primary_location.source.type:journal) above. You can also copy individual variables from this interface.
 
-You can then replace the sample ID above with your institution's OpenAlex ID *OR* ROR ID depending on which file you're using. **Please note, you must capitalize the i in the institutional identifier for the code to work.
+You can then replace the sample ID above with your institution's OpenAlex ID *OR* ROR ID depending on which file you're using. \*\*Please note, you must capitalize the i in the institutional identifier for the code to work.
 
 You can also modify the type and source type (or remove them) if you don't want to use the defaults.
 
@@ -89,35 +88,35 @@ The final Excel file is named according to query values and saved in the data fo
 
 The Excel file consists of 14 worksheets:
 
-1.  Guide: A listing of all of the worksheets  
-2.  Query:	Query Information (includes warnings for articles with more than 100 authors)  
+1.  Guide: A listing of all of the worksheets\
+2.  Query: Query Information (includes warnings for articles with more than 100 authors)\
 3.  Works: All institutional Works
 4.  OAWorks: All open access Works
-5.  GoldHybrid:	All gold and hybrid institutional Works (as defined by OpenAlex) https://docs.openalex.org/api-entities/works/work-object#oa_status  
-6.  AllAuthors:	All authors for all institutional works  
-7.  AllAffiliations:	All affiliations for all authors for all institutional works  
-8.  InstAuthors:	All affiliated authors for the institution for all works  
-9.  InstAuthorsGoldHybrid:	All affiliated authors for the institutional for Gold and Hybrid works  
-10. Corresponding:	All corresponding authors for all works Note: This data is a work in progress https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding  
-11. InstCorresponding:	All corresponding authors affiliated with the institution for all works  
-12. InstCorrespondingGoldHybrid:	All corresponding authors affiliated with the institution for all Gold and Hybrid works  
-13. APCs:	All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
-14. GoldHybridAPCs:	All list and 'paid' APC data for all gold and hybrid works Note: 'paid' APC data often uses list price: https://docs.openalex.org/api-entities/works/work-object#apc_paid  
+5.  GoldHybrid: All gold and hybrid institutional Works (as defined by OpenAlex) <https://docs.openalex.org/api-entities/works/work-object#oa_status>\
+6.  AllAuthors: All authors for all institutional works\
+7.  AllAffiliations: All affiliations for all authors for all institutional works\
+8.  InstAuthors: All affiliated authors for the institution for all works\
+9.  InstAuthorsGoldHybrid: All affiliated authors for the institutional for Gold and Hybrid works\
+10. Corresponding: All corresponding authors for all works Note: This data is a work in progress <https://docs.openalex.org/api-entities/works/work-object/authorship-object#is_corresponding>\
+11. InstCorresponding: All corresponding authors affiliated with the institution for all works\
+12. InstCorrespondingGoldHybrid: All corresponding authors affiliated with the institution for all Gold and Hybrid works\
+13. APCs: All list and 'paid' APC data for all institutional works Note: 'paid' APC data often uses list price: <https://docs.openalex.org/api-entities/works/work-object#apc_paid>\
+14. GoldHybridAPCs: All list and 'paid' APC data for all gold and hybrid works Note: 'paid' APC data often uses list price: <https://docs.openalex.org/api-entities/works/work-object#apc_paid>
 
 <h2>For more advanced users:</h2>
 
-There is a filter string to remove columns in lines 56-74. Those columns can be commented out or removed to add additional columns to the Excel file.
-Where there is only one variable for the column, they should be integrated into the Excel file without issue.
-Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
+There is a filter string to remove columns in lines 56-74. Those columns can be commented out or removed to add additional columns to the Excel file. Where there is only one variable for the column, they should be integrated into the Excel file without issue. Where there are multiple variables for the column/field, openxlsx2 will attempt to format the json to work with Excel, but the results may be messy or the code may fail entirely.
 
 ## KBART Retriever
-OpenAlexKBARTRetriever_v3.R: Queries the OpenAlex database based on a [KBART](https://www.niso.org/standards-committees/kbart) file and retrieves works counts for each row to determine the Open Access status per journal based on the coverage period. This code only works with Serials. It's experimental and was written with assistance from Microsoft Copilot. 
+
+OpenAlexKBARTRetriever_v3.R: Queries the OpenAlex database based on a [KBART](https://www.niso.org/standards-committees/kbart) file and retrieves works counts for each row to determine the Open Access status per journal based on the coverage period. This code only works with Serials. It's experimental and was written with assistance from Microsoft Copilot.
 
 **Warning** The code as written makes a lot of queries based on the size of the KBART file. You may need to break up the file depending on your OpenAlex API credit level.
 
 The code searches by online_identifier as the default and where that is blank will use the print_identifier.
 
 # Instructions
+
 After loading the necessary packages (see Dependencies above), there are two required variables:
 
 kbart_file (line 26) is the path and name of your KBART file
