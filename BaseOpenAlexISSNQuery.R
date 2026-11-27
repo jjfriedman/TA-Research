@@ -4,11 +4,13 @@
 # install.packages("openalexR") #Package to query OpenAlex
 # install.packages("tidyverse") #Package to work with data more easily
 # install.packages("openxlsx2") #Package to export to Excel
+# install.packages("cli")       #Package to clean warning message(s) for export to Excel
 
 #Load the necessary packages
 library(openalexR)
 library(tidyverse)
 library(openxlsx2)
+library(cli)
 
 #Query Settings
 #As of February 13, 2026, OpenAlex requires an API key (available for free).
@@ -38,8 +40,9 @@ CurrentTime <- substr(Sys.time(),1,19) #Get current time to the second
 CurrentTime <- str_replace(CurrentTime,' ','_') #Replace space with underscore
 CurrentTime <- str_replace_all(CurrentTime,':','_') #Replace : with underscore
 if (exists("last.warning")) { #Checks if a warning exists
-  QueryWarnings = names(last.warning) #Save warning message
-  QueryWarnings <- QueryWarnings[!QueryWarnings %in% c("\033[38;5;232m\033[33m!\033[38;5;232m `oa_fetch()` and `oa2df()` now return new names for some columns in openalexR\n  v2.0.0.\n\033[36mℹ\033[38;5;232m See NEWS.md for the list of changes.\n\033[36mℹ\033[38;5;232m Call `get_coverage()` to view all updated columns and their original names in\n  OpenAlex.\033[39m\n\033[90mThis warning is displayed once every 8 hours.\033[39m")] #This code filters out a specific openalexr warning about column name changes.
+  QueryWarnings = paste0(names(last.warning), collapse = "") #Save warning message as one character string even if there are multiple warnings
+  QueryWarnings <- QueryWarnings[!QueryWarnings %in% c("\033[38;5;232m\033[33m!\033[38;5;232m `oa_fetch()` and `oa2df()` now return new names for some columns in openalexR v2.0.0.\n\033[36mℹ\033[38;5;232m See NEWS.md for the list of changes.\n\033[36mℹ\033[38;5;232m Call `get_coverage()` to view all updated columns and their original names in OpenAlex.\033[39m\n\033[90mThis warning is displayed once every 8 hours.\033[39m")] #This code filters out a specific openalexr warning about column name changes
+  QueryWarnings <- cli::ansi_strip(QueryWarnings)
   if (length(QueryWarnings) == 0) {QueryWarnings = "No warnings"} #Enters "No warnings" if there are no warnings
 } else {
   QueryWarnings = "No warnings" #Enters "No warnings" if there are no warnings

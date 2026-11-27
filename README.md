@@ -1,4 +1,3 @@
-
 **New work in progress additions to main code**
 
 BaseOpenAlexDOIQuery.R: Queries the OpenAlex database based on a list of DOIs. DOIs to be supplied in the QueryDOI variable with "" and , separators. Output resembles the two institutional queries, but without filtering.
@@ -42,6 +41,8 @@ The code uses three R packages (instructions for installing and loading them are
 [tidyverse](https://tidyverse.org/)
 
 [openxlsx2](https://cran.r-project.org/web/packages/openxlsx2/index.html)
+
+[cli](https://cran.r-project.org/package=cli)
 
 ## Usage
 
